@@ -1,0 +1,75 @@
+{% extends 'food/base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href=" {%static 'food/style.css'%}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    {%block body%}
+    {% for item in item_list %}
+    <div class = "row">
+        <div class ="col-md-3 offset-md-2">
+            <img class = "card" height = "150px" src="{{item.item_image}}"/>
+        </div>
+        <div class ="col-md-3">
+            <h3>{{item.item_name}}</h3>
+            <h5>{{item.item_desc}}</h5>
+            <h6>{{item.item_price}}</h6>
+   
+        </div>
+        <div class ="col-md-1">
+            <a href="{%url 'food:detail' item.id %}" class="btn btn-success">Details</a>
+        </div>
+        {%if user.is_authenticated %}
+        <div class ="col-md-1">
+            <a href="{%url 'food:update_item' item.id %}" class="btn btn-success">Edit</a>
+        </div>
+
+        <div class ="col-md-1">
+            <a href="{%url 'food:delete_item' item.id %}" class="btn btn-success">Delete</a>
+        </div>
+        {%endif%}
+    </div>
+    {% endfor %}  
+    
+    <div class ="col-md-3 offset-md-8">
+        <div class="btn-group" role="group" aria-label="Item pagination">
+    {% if is_paginated %}
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li>
+            <a href="?page=1">First </a>
+            <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+        </li>
+        {% endif %}
+
+         <li class="">
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}. </span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li>
+            <span><a href="?page={{ page_obj.next_page_number }}">Next </a></span>
+            <a href="?page={{ page_obj.paginator.num_pages}}">Last</a>
+        </li>
+        {% endif %}
+    </ul>
+
+    {% endif %}
+    </div>
+    </div>
+
+    {% endblock %}    
+
+
+</body>
+</html>
